@@ -1,16 +1,14 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Form({seats}) {
-    const [name,setName] = useState("");
-    const [cpf,setCpf] = useState("");
+export default function Form({ids,name,setName,cpf,setCpf}) {
+
     const navigate = useNavigate();
 
     function bookSeats(e){
         e.preventDefault();
-        const body = {ids:seats, name: name, cpf: cpf};
+        const body = {ids:ids, name: name, cpf: cpf};
         console.log(body);
         const promise = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many",body);
         promise.then((response) =>{
@@ -23,12 +21,12 @@ export default function Form({seats}) {
         <form onSubmit={bookSeats}>
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." value={name} required onChange={(e) => setName(e.target.value)}/>
+                <input data-test="client-name" placeholder="Digite seu nome..." value={name} required onChange={(e) => setName(e.target.value)}/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." value={cpf} required onChange={(e) => setCpf(e.target.value)}/>
+                <input data-test="client-cpf" placeholder="Digite seu CPF..." value={cpf} required onChange={(e) => setCpf(e.target.value)}/>
 
-                <button type="submit">Reservar Assento(s)</button>
+                <button data-test="book-seat-btn" type="submit">Reservar Assento(s)</button>
             </FormContainer>
         </form>
     );

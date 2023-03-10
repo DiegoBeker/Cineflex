@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-export default function Seat({id,name,isAvailable,seats,setSeats}){
+export default function Seat({id,name,isAvailable,ids,setIds,seats,setSeats,updateData}){
     const selectedColor = "#1AAE9E";
     const selectedBorder = "#0E7D71"
     const availableColor = "#C3CFD9"
@@ -15,12 +15,25 @@ export default function Seat({id,name,isAvailable,seats,setSeats}){
     function selectSeat(){
         if(isAvailable){
             setSelected(!selected);
-            const aux = [...seats];
-            aux.push(id);
-            setSeats(aux);
+            const aux = toggleSeat(ids,id);
+            const chairs = toggleSeat(seats,name);
+            setIds(aux);
+            setSeats(chairs);
+            updateData();
         }else{
             alert("Esse assento não está disponível");
         }
+    }
+
+    function toggleSeat(array, element){
+        const newArray= [...array];
+        if(!newArray.includes(element)){
+            newArray.push(element);
+            return newArray
+        }else{
+            return array.filter((a) => a != element);
+        }
+
     }
 
     function changeColor(isAvailable,selected){
@@ -47,7 +60,8 @@ export default function Seat({id,name,isAvailable,seats,setSeats}){
 
 
     return (
-        <SeatItem 
+        <SeatItem
+            data-test="seat" 
             isAvailable={isAvailable}
             selected={selected}
             changeColor={changeColor}

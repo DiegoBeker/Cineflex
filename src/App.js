@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import styled from "styled-components"
 import HomePage from "./pages/HomePage/HomePage"
@@ -6,14 +7,58 @@ import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 
 export default function App() {
+    const [title, setTitle] = useState("");
+    const [date, setDate] = useState("");
+    const [time, setTime] = useState("");
+    const [seats, setSeats] = useState([]);
+    const [name, setName] = useState('');
+    const [cpf, setCpf] = useState('');
+    //console.log(seats);
+    function resetData() {
+        setTitle("");
+        setDate("");
+        setTime("");
+        setSeats([]);
+        setName("");
+        setCpf("");
+    }
+
     return (
         <BrowserRouter>
-           <NavContainer>CINEFLEX</NavContainer>
+            <NavContainer>CINEFLEX</NavContainer>
             <Routes>
-            <Route path="/" element={<HomePage />}/>
-            <Route path="/sessoes/:idFilme" element={<SessionsPage />}/>
-            <Route path="/assentos/:idSessao" element={<SeatsPage/>}/>
-            <Route path="/sucesso" element={<SuccessPage/>}/>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
+                <Route
+                    path="/assentos/:idSessao"
+                    element={
+                        <SeatsPage
+                            seats={seats}
+                            setSeats={setSeats}
+                            setTitle={setTitle}
+                            setDate={setDate}
+                            setTime={setTime}
+                            name={name}
+                            setName={setName}
+                            cpf={cpf}
+                            setCpf={setCpf}
+                        />
+                    }
+                />
+                <Route
+                    path="/sucesso"
+                    element={
+                        <SuccessPage
+                            title={title}
+                            date={date}
+                            time={time}
+                            seats={seats}
+                            name={name}
+                            cpf={cpf}
+                            resetData={resetData}
+                        />
+                    }
+                />
             </Routes>
         </BrowserRouter>
     )

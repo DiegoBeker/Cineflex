@@ -7,22 +7,26 @@ import Form from "../../components/Form";
 import Seat from "../../components/Seat";
 
 
-export default function SeatsPage() {
-
-    const [sessao,setSessao] = useState(undefined);
-    const {idSessao} = useParams();
-    const [seats,setSeats] = useState([]);
-    console.log(sessao);
-    console.log(seats);
-
+export default function SeatsPage({ seats, setSeats,setTitle, setDate, setTime, name, setName, cpf, setCpf }) {
+    const [ids, setIds] = useState([]);
+    const [sessao, setSessao] = useState(undefined);
+    const { idSessao } = useParams();
+    //console.log(ids);
+    
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`);
-        promise.then(response => setSessao(response.data));
-    },[])
+        promise.then(response => {
+            setSessao(response.data);
+        });
+    }, [])
 
-    
+    function updateData(){
+            setTitle(sessao.movie.title);
+            setDate(sessao.day.date);
+            setTime(sessao.name);
+    }
 
-    if(sessao === undefined){
+    if (sessao === undefined) {
         return <div>Carregando...</div>
     }
 
@@ -31,11 +35,23 @@ export default function SeatsPage() {
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                {sessao.seats.map((a) => <Seat key={a.id} id={a.id} name={a.name} isAvailable={a.isAvailable} seats={seats}  setSeats={setSeats}/>)}
+                {sessao.seats.map((a) => (
+                    <Seat
+                        key={a.id}
+                        id={a.id}
+                        name={a.name}
+                        isAvailable={a.isAvailable}
+                        ids={ids}
+                        setIds={setIds}
+                        seats={seats}
+                        setSeats={setSeats}
+                        updateData={updateData}
+                    />
+                ))}
             </SeatsContainer>
-            <Caption/>
-            <Form seats={seats}/>
-            <FooterContainer>
+            <Caption />
+            <Form ids={ids} name={name} setName={setName} cpf={cpf} setCpf={setCpf}/>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={sessao.movie.posterURL} alt="poster" />
                 </div>
