@@ -6,12 +6,11 @@ import styled from "styled-components"
 export default function SessionsPage() {
     const [sessions,setSessions] = useState(undefined);
     const {idFilme} = useParams();
-    console.log(idFilme);
     console.log(sessions);
 
     useEffect(() =>{
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`);
-        promise.then(response => setSessions(response.data.days));
+        promise.then(response => setSessions(response.data));
     },[])
     if(sessions ===undefined){
         return <div>Carregando...</div>
@@ -20,7 +19,7 @@ export default function SessionsPage() {
         <PageContainer>
             Selecione o horário
             <div>
-                {sessions.map((session) => (
+                {sessions.days.map((session) => (
                     <SessionContainer key={session.id}>
                         {`${session.weekday} - ${session.date}`}
                         <ButtonsContainer>
@@ -36,10 +35,10 @@ export default function SessionsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessions.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{sessions.title}</p>
                 </div>
             </FooterContainer>
 
